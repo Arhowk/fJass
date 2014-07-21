@@ -1,3 +1,16 @@
-# exclude everything except directory foo/bar
-*
-!/Netbeans Project/src
+# NetBeans specific #
+Netbeans Project/nbproject/private/
+Netbeans Project/build/
+Netbeans Project/nbbuild/
+Netbeans Project/dist/
+Netbeans Project/nbdist/
+Netbeans Project/nbactions.xml
+Netbeans Project/nb-configuration.xml
+
+# Class Files #
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
