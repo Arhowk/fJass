@@ -13,7 +13,7 @@ package codeeditor;
 public class Selection {
     CodeCanvas cvs;
     int sx, sy, gx, gy, prev_sx, prev_sy, prev_gx, prev_gy;
-    boolean lastInverted = false, flag = false;
+    boolean lastInverted = false, flag = false, flag2 = false;
     public Selection(CodeCanvas canvas, int startX, int startY){
         cvs = canvas;
         sx = startX;

@@ -21,7 +21,7 @@ import javafx.scene.text.Font;
  */
 public final class CodeCanvas extends ScrollPane{
     final static int DEFAULT_FONT_SIZE = 12,
-            DEFAULT_FONT_SPACING = 2,
+            DEFAULT_FONT_SPACING = 5,
             DEFAULT_HEIGHT = 500,
             DEFAULT_WIDTH = 500,
             FRAME_TIMEOUT = 31;
@@ -45,8 +45,8 @@ public final class CodeCanvas extends ScrollPane{
     double heightExtent = 0;
     
     private void computeWidthExtent(){
-        extent = Math.max(ctxLengthData.getHighest() + 50,getWidth()-2);
-        heightExtent = ctxData.size() * lineSize;
+        extent = Math.max(ctxLengthData.getHighest() + 2,getWidth()-2);
+        heightExtent = Math.max(ctxData.size() * lineSize, getHeight()-2);
         cvs.setWidth(extent);
         cvs.setHeight(heightExtent);
     }
@@ -65,6 +65,7 @@ public final class CodeCanvas extends ScrollPane{
     private void removeLine(int l){
         ctxData.remove(l);
         ctxLengthData.remove(l);
+        renderLines(l,l);
     }
             
     
@@ -77,8 +78,12 @@ public final class CodeCanvas extends ScrollPane{
         //System.out.println("clear rect : " + (y*lineSize)+"-"+(y*lineSize+lineSize));
         ctx.clearRect(0, (y*lineSize), extent, lineSize);
         ctx.setFill(Color.BLACK);
-        String s = ctxData.get(y);
-        ctx.fillText(s, 0,y * (fontSize + fontSpacing) + fontSize) ;
+        try{
+            String s = ctxData.get(y);
+            ctx.fillText(s, 0,y * (fontSize + fontSpacing) + fontSize) ;
+        }catch(Exception e){
+            
+        }
     }
     
 //    private void renderLineRemainder(int line, int charFromZero){
@@ -130,19 +135,29 @@ public final class CodeCanvas extends ScrollPane{
             double dny2 = (fontSize + fontSpacing);
             String s = ctxData.get(sel.sy);
             double dnx = MiscUtil.getStringWidth(s.substring(0,sel.sx), font);
-            double dnx2 = extent;
+            double dnx2;
+            if(sel.flag2 || !sel.flag){
+                if(sel.gx == s.length()){
+                    dnx2 = extent;
+                }else{
+                    dnx2 = MiscUtil.getStringWidth(s.substring(sel.sx, sel.gx),font);
+                }
+            }else{
+                dnx2 = extent;
+            }
             ctx.fillRect(dnx, dny, dnx2, dny2);
         }else{
           //  System.out.println(new Random().nextInt());
           //  System.out.println("else s : " + sel.sy + " this " + sel.gy);
           //  System.out.println("sel.sx : " + sel.sx);
-            if(sel.sy != 0 && sel.prev_sy == sel.sy - 1){
-                renderLines(sel.prev_sy,sel.prev_sy);
-            }else if(sel.prev_gy == sel.gy + 1){
-                renderLines(sel.prev_gy, sel.prev_gy);
+            if(sel.sy != 0 && sel.prev_sy < sel.sy){
+                renderLines(sel.prev_sy,sel.sy-1);
+            }else if(sel.prev_gy > sel.gy){
+                renderLines(sel.prev_gy, sel.gy-1);
             }
             Selection sl = new Selection(this, sel.sx, sel.sy);
             sl.flag = true;
+            sl.flag2 = true;
             sl.goTo(true, ctxData.get(sel.sy).length(), sel.sy);
             renderSelection(sl);
            // System.out.println("done");
@@ -156,6 +171,7 @@ public final class CodeCanvas extends ScrollPane{
             }
             sl = new Selection(this, 0, sel.gy);
             sl.flag = true;
+            sl.flag2 = true;
             sl.goTo(true, sel.gx, sel.gy);
             renderSelection(sl);
 //            renderLineRemainder(sel.sx,sel.sy);
@@ -225,7 +241,7 @@ public final class CodeCanvas extends ScrollPane{
         originalFont = font;
         ctx = cvs.getGraphicsContext2D();
         lineSize = fontSpacing + fontSize;
-        setFocusTraversable(true);
+        setFocusTraversable(false);
         cvs.setFocusTraversable(true);
         computeWidthExtent();
 //        setOnMouseMoved((a) -> {
@@ -240,7 +256,7 @@ public final class CodeCanvas extends ScrollPane{
         });
         cvs.setOnMouseDragged((a) -> {
             int y = normalizeY(a.getY());
-            if(y > -1){
+            if(y > -1 && a.getX() > -1){
                 mouseSel.goTo(true,normalizeX(a.getX(),y), y);
                 renderSelection(mouseSel);
             }
@@ -376,7 +392,8 @@ public final class CodeCanvas extends ScrollPane{
                 || c == KeyCode.OPEN_BRACKET
                 || c == KeyCode.CLOSE_BRACKET
                 || c == KeyCode.MINUS
-                || c == KeyCode.EQUALS;
+                || c == KeyCode.EQUALS
+                || c == KeyCode.SLASH;
                
     }
 }

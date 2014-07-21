@@ -73,7 +73,7 @@ public class CodeEditor extends Application {
         
         Scene scene = new Scene(root, 300, 250);
         
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("KWoHRA's fJass Console");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
