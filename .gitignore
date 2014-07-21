@@ -14,3 +14,5 @@ Netbeans Project/nb-configuration.xml
 *.jar
 *.war
 *.ear
+Netbeans Project/build/built-jar.properties
+Netbeans Project/dist/CodeEditor.jar
