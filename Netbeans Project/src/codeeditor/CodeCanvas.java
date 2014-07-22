@@ -116,19 +116,10 @@ public final class CodeCanvas extends ScrollPane{
         //    System.out.println("renderSelection");
       //      System.out.println("rndr2");
             if(!sel.flag){
-                System.out.println("flag good"+MiscUtil.mark());
-                if(sel.sy != 0 && sel.prev_sy == sel.sy - 1){
-                    System.out.println("render before");
-                    renderLines(sel.prev_sy,sel.sy);
-                }else if(sel.prev_gy == sel.gy + 1){
-                    System.out.println("render after" + sel.prev_gy);
-                    renderLines(sel.gy, sel.prev_gy);
-                }else{
-                    renderLines(sel.sy,sel.gy);
-                }
-            }else{
-                renderLines(sel.sy,sel.gy);
+                renderLines(sel.prev_sy, sel.prev_gy);
             }
+                renderLines(sel.sy,sel.gy);
+            
             ctx.setFill(Color.BLUEVIOLET);
             ctx.setGlobalAlpha(0.2);
             double dny = (sel.sy * lineSize);
@@ -140,6 +131,7 @@ public final class CodeCanvas extends ScrollPane{
                 if(sel.gx == s.length()){
                     dnx2 = extent;
                 }else{
+                    System.out.println("sel.gx : " + sel.gx);
                     dnx2 = MiscUtil.getStringWidth(s.substring(sel.sx, sel.gx),font);
                 }
             }else{
@@ -150,11 +142,7 @@ public final class CodeCanvas extends ScrollPane{
           //  System.out.println(new Random().nextInt());
           //  System.out.println("else s : " + sel.sy + " this " + sel.gy);
           //  System.out.println("sel.sx : " + sel.sx);
-            if(sel.sy != 0 && sel.prev_sy < sel.sy){
-                renderLines(sel.prev_sy,sel.sy-1);
-            }else if(sel.prev_gy > sel.gy){
-                renderLines(sel.prev_gy, sel.gy-1);;
-            }
+                renderLines(sel.prev_sy, sel.prev_gy);
             Selection sl = new Selection(this, sel.sx, sel.sy);
             sl.flag = true;
             sl.flag2 = true;

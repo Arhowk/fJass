@@ -11,7 +11,7 @@
   </resources>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="CodeEditor.jar" size="11392" download="eager" />
+    <jar href="CodeEditor.jar" size="11543" download="eager" />
   </resources>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="CodeEditor" >
     <param name="requiredFXVersion" value="2.2+"/>
