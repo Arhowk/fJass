@@ -153,7 +153,7 @@ public final class CodeCanvas extends ScrollPane{
             if(sel.sy != 0 && sel.prev_sy < sel.sy){
                 renderLines(sel.prev_sy,sel.sy-1);
             }else if(sel.prev_gy > sel.gy){
-                renderLines(sel.prev_gy, sel.gy-1);
+                renderLines(sel.prev_gy, sel.gy-1);;
             }
             Selection sl = new Selection(this, sel.sx, sel.sy);
             sl.flag = true;
